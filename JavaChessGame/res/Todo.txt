@@ -1,0 +1,8 @@
+-King movement
+-Pawn movement
+-Special moves ( en passante, castles)
+
+
+-transfer data from controller to view w
+-manipulate hashmap
+-highlight legalMoves from view w
