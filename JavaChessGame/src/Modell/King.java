@@ -13,9 +13,12 @@ public class King extends Piece {
 		super(pieceType, pieceTeam);
 		// TODO Auto-generated constructor stub
 	}
-
-	@Override
-	public List<Move> calculateMoves(int pieceTeam, int piecePosition) {
+	
+	
+	
+	
+    @Override
+	public List<Move> calculateMoves(int piecePosition) {
 		List<Move> legalKingMoves = new ArrayList<Move>();
 
 		for (int offset : KingOffsets) {
@@ -25,12 +28,22 @@ public class King extends Piece {
 
 				if (isFirstColumnExclusion(candidatePosition, offset)
 						|| isEighthColumnExclusion(candidatePosition, offset)) {
-					break;
+					continue;
 				}
 
-				legalKingMoves.add(new Move(pieceType, pieceTeam, candidatePosition, candidatePosition + offset));
+				if (Board.isOccupiedBy(candidatePosition, candidatePosition + offset) == "enemy") {
 
-				candidatePosition += offset;
+					legalKingMoves.add(new Move(candidatePosition, candidatePosition + offset, 2));
+					continue;
+
+				} else if (Board.isOccupiedBy(candidatePosition, candidatePosition + offset) == "member") {
+
+					continue;
+				} else if (Board.isOccupiedBy(candidatePosition, candidatePosition + offset) == "null") {
+					legalKingMoves.add(new Move(candidatePosition, candidatePosition + offset, 1));
+
+					
+				}
 			}
 		}
 

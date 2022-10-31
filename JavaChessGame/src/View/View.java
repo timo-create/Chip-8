@@ -7,12 +7,10 @@ import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import Controller.Board;
@@ -22,12 +20,15 @@ import Modell.Piece;
 public class View extends JPanel {
 
 	private static final long serialVersionUID = 1L;
+	private final int TILE_SIZE = 100;
 	private List<BufferedImage> piecesImages;
-	private Map<Integer, JLabel> tiles;
+
+	public List<Move> highLightPositions = new ArrayList<Move>();
+	int checkedPiece;
 
 	public View() {
 		piecesImages = getPiecesImages(loadImages("res/pieces.png"));
-		tiles = new HashMap<>(64, 1.0F);
+		
 	}
 
 	private BufferedImage loadImages(String path) {
@@ -78,24 +79,14 @@ public class View extends JPanel {
 		}
 	}
 
-	public void drawStartingPosition() {
+	public void drawPosition(Graphics g) {
 
-		for (int i = 0; i < 64; i++) {
+		for (Map.Entry<Integer, Piece> entry : Board.squares.entrySet()) {
 
-			Piece p = Board.squares.get(i);
-			int[] coordinate = calculateCoordinateFromPosition(i);
-			PieceLabel label;
-
-			if (p != null) {
-				label = new PieceLabel(getCorrectImage(p));
-
-			} else {
-				label = new PieceLabel(null);
-			}
-
-			label.setBounds(coordinate[0] * 100, coordinate[1] * 100, 100, 100);
-			this.add(label);
-			tiles.put(i, label);
+			Piece p = entry.getValue();
+			int[] coordinate = calculateCoordinateFromPosition(entry.getKey());
+			
+			g.drawImage(getCorrectImage(p), coordinate[0]*100, coordinate[1]*100, TILE_SIZE, TILE_SIZE, this);
 
 		}
 
@@ -149,18 +140,17 @@ public class View extends JPanel {
 
 	}
 
-	public void highLightPieceMoves(List<Move> targetPositions) {
+	public void highLightPieceMoves(Graphics g) {
 
-		for (Move target : targetPositions) {
+		for (Move target : highLightPositions) {
 
 			int[] coordinateFromTarget = calculateCoordinateFromPosition(target.getDestinationPosition());
-			JLabel label = tiles.get(target.getDestinationPosition());
-		
-			
+			g.setColor(Color.white);
+			g.fillRect(coordinateFromTarget[0]*100, coordinateFromTarget[1]*100, TILE_SIZE, TILE_SIZE);
 
 		}
 
-	}
+	 }
 
 	private int[] calculateCoordinateFromPosition(int position) {
 
@@ -177,51 +167,15 @@ public class View extends JPanel {
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		drawBoard(g);
-		drawStartingPosition();
-
-	}
-
-}
-
-class PieceLabel extends JLabel {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	BufferedImage pieceImage;
-
-	public PieceLabel(BufferedImage pieceImage) {
-
-		this.pieceImage = pieceImage;
-
-	}
-
-	public void paintComponent(Graphics g) {
-		super.paintComponent(g);
-
-		if (pieceImage != null) {
-
-			g.drawImage(pieceImage, 0, 0, 100, 100, this);
+		if(highLightPositions != null) {
+			highLightPieceMoves(g);
 		}
+		drawPosition(g);
+		
+		
+		
 
 	}
 
 }
 
-class TileLabel extends JLabel {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
-	public void paintComponent(Graphics g) {
-		super.paintComponent(g);
-
-		g.setColor(Color.RED);
-		g.fillRect(0, 0, 100, 100);
-
-	}
-
-}

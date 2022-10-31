@@ -24,7 +24,6 @@ public class ViewFrame extends JFrame {
 		this.setVisible(true);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.add(panel);
-		this.addMouseListener(gc);
 		Container c = this.getContentPane();
 		c.setPreferredSize(new Dimension(800, 800));
 		this.pack();

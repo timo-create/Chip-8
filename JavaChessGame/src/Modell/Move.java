@@ -2,34 +2,26 @@ package Modell;
 
 public class Move {
 	
-	int pieceType;
-	int pieceTeam;
+	
 	int startPosition;
 	int destinationPosition;
+	int kindOfMove;
 	
-    public Move(int pieceType, int pieceTeam, int startPosition, int destinationPosition) {
+    public Move( int startPosition, int destinationPosition, int kindOfMove) {
 		
-		this.pieceType = pieceType; 
-		this.pieceTeam = pieceTeam;
+		
 		this.startPosition = startPosition;
 		this.destinationPosition = destinationPosition;
+		this.kindOfMove = kindOfMove;
 		
 	}
-	
-	public int getPieceType() {
-		return pieceType;
+
+	public int getKindOfMove() {
+		return kindOfMove;
 	}
 
-	public void setPieceType(int pieceType) {
-		this.pieceType = pieceType;
-	}
-
-	public int getPieceTeam() {
-		return pieceTeam;
-	}
-
-	public void setPieceTeam(int pieceTeam) {
-		this.pieceTeam = pieceTeam;
+	public void setKindOfMove(int kindOfMove) {
+		this.kindOfMove = kindOfMove;
 	}
 
 	public int getStartPosition() {

@@ -1,4 +1,5 @@
 package Modell;
+
 import java.util.ArrayList;
 import java.util.List;
 import Controller.Board;
@@ -13,28 +14,38 @@ public class Knight extends Piece {
 	}
 
 	@Override
-	public List<Move> calculateMoves(int pieceTeam, int piecePosition) {
-		
+	public List<Move> calculateMoves(int piecePosition) {
+
 		List<Move> legalKnightMoves = new ArrayList<Move>();
-		
-		for(int offset : knightOffsets) {
-			
-			if( piecePosition+offset <= 64 && piecePosition+offset >=0) {
-				
-				if(isFirstColumnExclusion(piecePosition, offset)||isSeventhColumnExclusion(piecePosition, offset)||isSecondColumnExclusion(piecePosition,offset)||isEighthColumnExclusion(piecePosition,offset)) {
-					
+
+		for (int offset : knightOffsets) {
+
+			int candidatePosition = piecePosition + offset;
+
+			if (piecePosition + offset <= 64 && piecePosition + offset >= 0) {
+
+				if (isFirstColumnExclusion(piecePosition, offset) || isSeventhColumnExclusion(piecePosition, offset)
+						|| isSecondColumnExclusion(piecePosition, offset)
+						|| isEighthColumnExclusion(piecePosition, offset)) {
+
 					continue;
 				}
-				legalKnightMoves.add(new Move(pieceType, pieceTeam, piecePosition, piecePosition+offset));
+				if (Board.isOccupiedBy(piecePosition, candidatePosition) == "enemy") {
+
+					legalKnightMoves.add(new Move(piecePosition, candidatePosition, 2));
+					continue;
+
+				} else if (Board.isOccupiedBy(piecePosition, candidatePosition) == "member") {
+
+					continue;
+				} else if (Board.isOccupiedBy(piecePosition, candidatePosition) == "null") {
+					legalKnightMoves.add(new Move(piecePosition, candidatePosition, 1));
+				}
 			}
 		}
-		
-		
+
 		return legalKnightMoves;
 	}
-	
-	
-	
 
 	public static boolean isFirstColumnExclusion(int currentPosition, int candidateOffset) {
 
